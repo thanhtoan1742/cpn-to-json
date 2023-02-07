@@ -1,0 +1,121 @@
+{
+  "pages": [
+    {
+      "data": {
+        "places": [
+          {
+            "marking": "1`0",
+            "name": "Generated",
+            "id": "ID1425860539",
+            "colset": "POWER"
+          },
+          {
+            "marking": "[({i=1,t=GEN,c=2},2)\\n,({i=2,t=GEN,c=1},1)\\n]",
+            "name": "Generator",
+            "id": "ID1426505182",
+            "colset": "NODE_POWER"
+          },
+          {
+            "marking": "[({i=4,t=CON,c=1},0)\\n,({i=5,t=CON,c=1},0)]",
+            "name": "Consumer",
+            "id": "ID1426875468",
+            "colset": "NODE_POWER"
+          }
+        ],
+        "name": "sgrid",
+        "id": "ID6",
+        "transitions": [
+          {
+            "name": "gen",
+            "id": "ID1426523629",
+            "conditions": "null",
+            "priority": "null"
+          },
+          {
+            "name": "trans",
+            "id": "ID1426854737",
+            "conditions": "[p3 >= #c(con)]",
+            "priority": "null"
+          }
+        ],
+        "arcs": [
+          {
+            "function": "(gen,p1)",
+            "source": "ID1426505182",
+            "target": "ID1426523629"
+          },
+          {
+            "function": "fn_gen2(rcb_gen,p1,p2)",
+            "source": "ID1426523629",
+            "target": "ID1425860539"
+          },
+          {
+            "function": "p3",
+            "source": "ID1425860539",
+            "target": "ID1426854737"
+          },
+          {
+            "function": "fn_cons(con,p4)",
+            "source": "ID1426854737",
+            "target": "ID1426875468"
+          },
+          {
+            "function": "(con,p4)",
+            "source": "ID1426875468",
+            "target": "ID1426854737"
+          },
+          {
+            "function": "p2",
+            "source": "ID1425860539",
+            "target": "ID1426523629"
+          },
+          {
+            "function": "fn_trans(con,p3)",
+            "source": "ID1426854737",
+            "target": "ID1425860539"
+          }
+        ]
+      },
+      "name": "sgrid",
+      "id": "ID6"
+    },
+    {
+      "data": {
+        "places": [],
+        "name": "ExportToGraphviz",
+        "id": "ID1426398528",
+        "transitions": [],
+        "arcs": []
+      },
+      "name": "ExportToGraphviz",
+      "id": "ID1426398528"
+    }
+  ],
+  "declarations": [
+    "val P_HIGH = 100;",
+    "val P_NORMAL = 1000;",
+    "val P_LOW = 10000;",
+    "colset UNIT = unit;",
+    "colset BOOL = bool;",
+    "colset INT = int;",
+    "colset INTINF",
+    "colset TIME",
+    "colset STRING = string;",
+    "colset IDX = int;",
+    "colset TYPE = with GEN | CON;",
+    "colset CAPACITY = int;",
+    "colset POWER = int;",
+    "colset CB = with ON | OFF;",
+    "colset NODE = record i: IDX * t: TYPE * c: INT;",
+    "colset NODE_POWER = NODE * POWER;",
+    "var p1, p2, p3, p4: POWER;",
+    "colset RanPow = int with 1..3;",
+    "var gen, con: NODE;",
+    "var r2: RanPow;",
+    "var rcb_gen: CB;",
+    "fun fn_gen(p1: POWER,p2: POWER) = p1+ p2;",
+    "fun fn_gen2(cb: CB, p1: POWER,p2: POWER) = if cb=ON then p1+ p2 else p2;",
+    "fun fn_cons(n: NODE, p: POWER) = (n,p+(#c(n)))",
+    "fun fn_trans(n:NODE, p:POWER) = p-(#c(n))"
+  ]
+}
